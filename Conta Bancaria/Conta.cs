@@ -12,8 +12,6 @@ namespace Conta_Bancaria
         public string Titular { get; set; }
         public int Numero { get; set; }
         public decimal Saldo { get; private set; }
-        List<Conta> contas = new List<Conta>();
-
         public Conta(string titular, int numero)
         {
             Titular = titular;

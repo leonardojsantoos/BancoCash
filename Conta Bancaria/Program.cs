@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using Conta_Bancaria;
 
 namespace Conta_Bancaria
@@ -7,10 +8,9 @@ namespace Conta_Bancaria
     {
         static void Main(string[] args)
         {
-            List<Conta> contas = new List<Conta>();
-
-            Conta conta1 = new Conta("Leonardo", 444222);
-            Conta conta2 = new Conta("Maria", 444222);
+            Banco banco = new Banco();
+            banco.AddConta(new Conta("Leonardo", 444222));
+            banco.AddConta(new Conta("Maria", 444223));
             int opcao;
             do
             {
@@ -19,8 +19,9 @@ namespace Conta_Bancaria
                                   $"1 - Depositar\n" +
                                   $"2 - Sacar\n" +
                                   $"3 - Transferir\n" +
-                                  //$"4 - Criar/Adicionar Conta\n" +
-                                  $"5 - Fechar programa");
+                                  $"4 - Criar/Adicionar Conta\n" +
+                                  $"5 - Listar contas\n" +
+                                  $"6 - Fechar programa");
                 opcao = Convert.ToInt32( Console.ReadLine() );
                 switch ( opcao )
                 {
@@ -31,9 +32,18 @@ namespace Conta_Bancaria
                         Console.Clear();
                         try
                         {
-                            conta1.Depositar(deposito);
-                            Console.WriteLine($"R${deposito} depositado!\n" +
-                                              $"Saldo atual: {conta1.Saldo}");
+                            Console.Write("Número da conta: ");
+                            int numero = int.Parse(Console.ReadLine());
+                            Conta conta = banco.BuscarConta(numero);
+                            if (conta == null)
+                                Console.WriteLine("Conta não encontrada!");
+                            else
+                            {
+                                conta.Depositar(deposito);
+                                Console.WriteLine($"R${deposito} depositado!\n" +
+                                $"Saldo atual: {conta.Saldo}");    
+                            }
+                            
                             Console.ReadKey();
                         }
                         catch (ArgumentException ex)
@@ -88,19 +98,27 @@ namespace Conta_Bancaria
                         Console.WriteLine("Criação de Conta\n");
                         Console.Write("Insira o nome do titular da conta: ");
                         string nome = Console.ReadLine();
-                        Console.WriteLine("\nInsira o número da conta: ");
+                        Console.Write("\nInsira o número da conta: ");
                         int num = Convert.ToInt32(Console.ReadLine());
-                        decimal saldo = 0;
+                        Console.Clear();
                         Console.WriteLine("Conta criada!");
+                        conta1.contas.Add(new Conta(nome, num));
                         Console.ReadKey();
                         break;
 
+                    case 5:
+                        Console.Clear();
+                        Console.WriteLine("Contas Registradas:\n\n");
+                        conta1.ExibirLista();
+                        break;
+
                     default:
+                        Console.Clear();
                         Console.WriteLine("Programa fechado...");
                         Console.ReadKey();
                         break;
                 }
-            }while (opcao != 5);
+            }while (opcao != 6);
             
         }
     }
