@@ -19,7 +19,7 @@ namespace Conta_Bancaria
             foreach (Conta c in contas)
             {
                 Console.WriteLine($"Titular: {c.Titular}\n" +
-                                  $"Número: {c.Numero}\n\n");
+                                  $"Número: {c.Numero}\n");
             }
         }
         public Conta BuscarConta(int numero)

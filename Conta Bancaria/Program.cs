@@ -26,90 +26,120 @@ namespace Conta_Bancaria
                 switch ( opcao )
                 {
                     case 1:
-                        Console.Clear();
-                        Console.Write("Insira o valor para Depositar: ");
-                        decimal deposito = decimal.Parse(Console.ReadLine());
-                        Console.Clear();
-                        try
                         {
-                            Console.Write("Número da conta: ");
-                            int numero = int.Parse(Console.ReadLine());
-                            Conta conta = banco.BuscarConta(numero);
+                            Console.Clear();
+                            Console.Write("Insira o valor para Depositar: ");
+                            decimal deposito = decimal.Parse(Console.ReadLine());
+
+                            Conta conta = ObterConta(banco);
                             if (conta == null)
-                                Console.WriteLine("Conta não encontrada!");
-                            else
+                            {
+                                Console.ReadKey();
+                                break;
+                            }
+
+                            try
                             {
                                 conta.Depositar(deposito);
-                                Console.WriteLine($"R${deposito} depositado!\n" +
-                                $"Saldo atual: {conta.Saldo}");    
+                                Console.WriteLine($"R${deposito} depositado!");
+                                Console.WriteLine($"Saldo atual: {conta.Saldo}");
                             }
-                            
-                            Console.ReadKey();
-                        }
-                        catch (ArgumentException ex)
-                        {
-                            Console.WriteLine(ex.Message);
-                        }
-                        break;
+                            catch (ArgumentException ex)
+                            {
+                                Console.WriteLine(ex.Message);
+                            }
 
+                            Console.ReadKey();
+                            break;
+                        }
                     case 2:
-                        Console.Clear();
-                        Console.Write("Insira o valor para sacar: ");
-                        decimal saque = decimal.Parse(Console.ReadLine());
-                        Console.Clear();
-                        try
                         {
-                            conta1.Sacar(saque);
-                            Console.WriteLine("Valor sacado!\n" +
-                                              $"Saldo atual: {conta1.Saldo}");
-                            Console.ReadKey();
-                        }
-                        catch ( ArgumentException ex)
-                        {
-                            Console.WriteLine(ex.Message);
-                        }
-                        catch (InvalidCastException ex)
-                        {
-                            Console.WriteLine(ex.Message);
-                        }
-                        break;
+                            Console.Clear();
+                            Console.Write("Insira o valor para sacar: ");
+                            decimal saque = decimal.Parse(Console.ReadLine());
 
-                    case 3:
-                        Console.Clear();
-                        Console.Write("Insira o valor para tranferir: ");
-                        decimal transferencia = decimal.Parse(Console.ReadLine());
-                        Console.Clear() ;
-                        if ( transferencia <= conta1.Saldo)
-                        {
-                            conta1.Transferir(conta2, transferencia);
-                            Console.WriteLine($"Saldo transferido de:\n" +
-                                              $"{conta1.Titular} -> {conta2.Titular}\n\n" +
-                                              $"Saldo atual: {conta1.Saldo}");
+                            Conta conta = ObterConta(banco);
+                            if (conta == null)
+                            {
+                                Console.ReadKey();
+                                break;
+                            }
+
+                            try
+                            {
+                                conta.Sacar(saque);
+                                Console.WriteLine($"Valor sacado!");
+                                Console.WriteLine($"Saldo atual: {conta.Saldo}");
+                            }
+                            catch (ArgumentException ex)
+                            {
+                                Console.WriteLine(ex.Message);
+                            }
+
                             Console.ReadKey();
+                            break;
                         }
-                        else
-                            Console.WriteLine($"Insira um válor valido!\n\n" +
-                                              $"Saldo atual: {conta1.Saldo}");
+                    case 3:
+                        {
+                            Console.Clear();
+                            Console.Write("Conta de origem: ");
+                            Conta origem = ObterConta(banco);
+                            if (origem == null)
+                            {
+                                Console.ReadKey();
+                                break;
+                            }
+                            Console.Write("Conta de destino: ");
+                            Conta destino = ObterConta(banco);
+                            if (destino == null)
+                            {
+                                Console.ReadKey();
+                                break;
+                            }
+                            Console.Write("Valor para transferir: ");
+                            decimal transferencia = decimal.Parse(Console.ReadLine());
+
+                            if (transferencia <= origem.Saldo)
+                            {
+                                origem.Transferir(destino, transferencia);
+                                Console.WriteLine($"Saldo transferido de {origem.Titular} -> {destino.Titular}");
+                                Console.WriteLine($"Saldo atual: {origem.Saldo}");
+                            }
+                            else
+                            {
+                                Console.WriteLine("Saldo insuficiente para realizar a transferência!");
+                                Console.WriteLine($"Saldo atual: {origem.Saldo}");
+                            }
                             Console.ReadKey();
-                        break;
+                            break;
+                        }
 
                     case 4:
-                        Console.Clear();
-                        Console.WriteLine("Criação de Conta\n");
-                        Console.Write("Insira o nome do titular da conta: ");
-                        string nome = Console.ReadLine();
-                        Console.Write("\nInsira o número da conta: ");
-                        int num = Convert.ToInt32(Console.ReadLine());
-                        Console.Clear();
-                        Console.WriteLine("Conta criada!");
-                        conta1.contas.Add(new Conta(nome, num));
-                        Console.ReadKey();
-                        break;
+                        {
+                            Console.Clear();
+                            Console.WriteLine("Criação de Conta\n");
+                            Console.Write("Insira o nome do titular da conta: ");
+                            string nome = Console.ReadLine();
+                            Console.Write("Insira o número da conta: ");
+                            if (!int.TryParse(Console.ReadLine(), out int num))
+                            {
+                                Console.Clear();
+                                Console.WriteLine("Número de conta inválido!");
+                                Console.ReadKey();
+                                break;
+                            }
+                            banco.AddConta(new Conta(nome, num));
+                            Console.Clear();
+                            Console.WriteLine("Conta criada com sucesso!");
+                            Console.ReadKey();
+                            break;
+                        }
 
                     case 5:
                         Console.Clear();
-                        Console.WriteLine("Contas Registradas:\n\n");
-                        conta1.ExibirLista();
+                        Console.WriteLine("Contas Registradas:\n");
+                        banco.ListarContas();
+                        Console.ReadKey();
                         break;
 
                     default:
@@ -120,6 +150,20 @@ namespace Conta_Bancaria
                 }
             }while (opcao != 6);
             
+        }
+        private static Conta ObterConta(Banco banco)
+        {
+            Console.Write("Número da conta: ");
+            if (!int.TryParse(Console.ReadLine(), out int numero))
+            {
+                Console.WriteLine("Número inválido!");
+                return null;
+            }
+            Conta conta = banco.BuscarConta(numero);
+            if (conta == null)
+                Console.WriteLine("Conta não encontrada!");
+
+            return conta;
         }
     }
 }
