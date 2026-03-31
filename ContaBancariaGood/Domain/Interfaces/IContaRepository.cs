@@ -11,7 +11,7 @@ namespace ContaBancariaGood.Domain.Interfaces
     public interface IContaRepository
     {
         void Adicionar(Conta conta);
-        Conta ObterPorNumero(int numero);
+        Conta ObterPorNumero(string numero);
         IEnumerable<Conta> ObterTodas();
     }
 }

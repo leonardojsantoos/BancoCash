@@ -1,26 +1,19 @@
-﻿using ContaBancariaGood.Domain.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ContaBancariaGood.Domain.Entities;
+﻿using ContaBancariaGood.Domain.Entities;
+using ContaBancariaGood.Domain.Interfaces;
 
 namespace ContaBancariaGood.Infrastructure.Repositories
 {
     public class ContaRepository : IContaRepository
     {
-        private readonly Dictionary<int, Conta> _contas = new();
+        private readonly Dictionary<string, Conta> _contas = new();
 
         public void Adicionar(Conta conta)
         {
-            if (_contas.ContainsKey(conta.Numero))
+            if (!_contas.TryAdd(conta.Numero, conta))
                 throw new InvalidOperationException("Conta já existe.");
-
-            _contas.Add(conta.Numero, conta);
         }
 
-        public Conta ObterPorNumero(int numero)
+        public Conta ObterPorNumero(string numero)
         {
             _contas.TryGetValue(numero, out var conta);
             return conta;

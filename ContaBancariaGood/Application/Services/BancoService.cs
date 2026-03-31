@@ -1,10 +1,5 @@
-﻿using ContaBancariaGood.Domain.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ContaBancariaGood.Domain.Entities;
+﻿using ContaBancariaGood.Domain.Entities;
+using ContaBancariaGood.Domain.Interfaces;
 
 namespace ContaBancariaGood.Application.Services
 {
@@ -17,25 +12,25 @@ namespace ContaBancariaGood.Application.Services
             _repository = repository;
         }
 
-        public void CriarConta(string nome, int numero)
+        public void CriarConta(string nome, string numero)
         {
             var conta = new Conta(nome, numero);
             _repository.Adicionar(conta);
         }
 
-        public void Depositar(int numero, decimal valor)
+        public void Depositar(string numero, decimal valor)
         {
             var conta = ObterConta(numero);
             conta.Depositar(valor);
         }
 
-        public void Sacar(int numero, decimal valor)
+        public void Sacar(string numero, decimal valor)
         {
             var conta = ObterConta(numero);
             conta.Sacar(valor);
         }
 
-        public void Transferir(int origem, int destino, decimal valor)
+        public void Transferir(string origem, string destino, decimal valor)
         {
             var contaOrigem = ObterConta(origem);
             var contaDestino = ObterConta(destino);
@@ -48,7 +43,7 @@ namespace ContaBancariaGood.Application.Services
             return _repository.ObterTodas();
         }
 
-        private Conta ObterConta(int numero)
+        private Conta ObterConta(string numero)
         {
             return _repository.ObterPorNumero(numero)
                 ?? throw new Exception("Conta não encontrada.");

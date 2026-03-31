@@ -9,10 +9,10 @@ namespace ContaBancariaGood.Domain.Entities
     public class Conta
     {
         public string Titular { get; }
-        public int Numero { get; }
+        public string Numero { get; }
         public decimal Saldo { get; private set; }
 
-        public Conta(string titular, int numero)
+        public Conta(string titular, string numero)
         {
             Titular = titular;
             Numero = numero;

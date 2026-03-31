@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ContaBancariaGood.Application.Services;
+﻿using ContaBancariaGood.Application.Services;
 
 namespace ContaBancariaGood.UI
 {
@@ -55,8 +50,10 @@ namespace ContaBancariaGood.UI
         }
         private void Depositar()
         {
-            int numero = LerInt("Conta: ");
-            decimal valor = LerDecimal("Valor: ");
+            Console.Clear();
+            Console.Write("Conta: ");
+            string numero = Console.ReadLine();
+            decimal valor = LerDecimal("Valor: ");  
 
             _service.Depositar(numero, valor);
 
@@ -65,7 +62,9 @@ namespace ContaBancariaGood.UI
         }
         private void Sacar()
         {
-            int numero = LerInt("Conta: ");
+            Console.Clear();
+            Console.Write("Conta: ");
+            string numero = Console.ReadLine();
             decimal valor = LerDecimal("Valor: ");
 
             _service.Sacar(numero, valor);
@@ -75,8 +74,11 @@ namespace ContaBancariaGood.UI
         }
         private void Transferir()
         {
-            int origem = LerInt("Origem: ");
-            int destino = LerInt("Destino: ");
+            Console.Clear();
+            Console.Write("Origem: ");
+            string origem = Console.ReadLine();
+            Console.Write("Destino: ");
+            string destino = Console.ReadLine();
             decimal valor = LerDecimal("Valor: ");
 
             _service.Transferir(origem, destino, valor);
@@ -86,10 +88,12 @@ namespace ContaBancariaGood.UI
         }
         private void CriarConta()
         {
+            Console.Clear();
             Console.Write("Nome: ");
             string nome = Console.ReadLine();
 
-            int numero = LerInt("Número: ");
+            Console.Write("Numero: ");
+            string numero = Console.ReadLine();
 
             _service.CriarConta(nome, numero);
 
@@ -98,6 +102,7 @@ namespace ContaBancariaGood.UI
         }
         private void Listar()
         {
+            Console.Clear();
             var contas = _service.ListarContas();
 
             if (!contas.Any())
@@ -116,11 +121,6 @@ namespace ContaBancariaGood.UI
                 }
             }
             Console.ReadKey();
-        }
-        private int LerInt(string mensagem)
-        {
-            Console.Write(mensagem);
-            return int.Parse(Console.ReadLine());
         }
         private decimal LerDecimal(string mensagem)
         {
