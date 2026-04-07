@@ -15,6 +15,12 @@ namespace ContaBancariaGood.Domain.Entities
 
         public Conta(string titular, string numero)
         {
+            if (string.IsNullOrWhiteSpace(titular))
+                throw new ArgumentException("Insira o nome do titular");
+
+            if (string.IsNullOrWhiteSpace(numero))
+                throw new ArgumentException("Insira o numero da conta");
+
             Titular = titular;
             Numero = numero;
         }
