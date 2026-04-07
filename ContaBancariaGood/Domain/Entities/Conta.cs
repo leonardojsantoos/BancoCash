@@ -8,6 +8,7 @@ namespace ContaBancariaGood.Domain.Entities
 {
     public class Conta
     {
+        //implementar stategy pattern
         public string Titular { get; }
         public string Numero { get; }
         public decimal Saldo { get; private set; }
