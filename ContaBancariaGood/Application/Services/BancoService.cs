@@ -30,12 +30,12 @@ namespace ContaBancariaGood.Application.Services
             conta.Sacar(valor);
         }
 
-        public void Transferir(string origem, string destino, decimal valor)
+        public void Transferir(string origem, string destino, decimal valor, ITransferenciaStrategy estrategia)
         {
             var contaOrigem = ObterConta(origem);
             var contaDestino = ObterConta(destino);
 
-            contaOrigem.Transferir(contaDestino, valor);
+            contaOrigem.ExecutarTransferencia(estrategia, contaDestino, valor);
         }
 
         public IEnumerable<Conta> ListarContas()

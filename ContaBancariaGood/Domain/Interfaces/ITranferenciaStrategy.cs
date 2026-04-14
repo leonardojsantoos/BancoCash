@@ -2,8 +2,8 @@
 
 namespace ContaBancariaGood.Domain.Interfaces
 {
-    internal interface ITranferenciaStrategy
+    public interface ITransferenciaStrategy
     {
-        void Depositar(Conta origem, Conta destino, decimal valor);
+        void Transferir(Conta origem, Conta destino, decimal valor);
     }
 }

@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ContaBancariaGood.Domain.Interfaces;
 
 namespace ContaBancariaGood.Domain.Entities
 {
     public class Conta
     {
-        //implementar stategy pattern
         public string Titular { get; }
         public string Numero { get; }
         public decimal Saldo { get; private set; }
@@ -43,14 +38,12 @@ namespace ContaBancariaGood.Domain.Entities
 
             Saldo -= valor;
         }
-
-        public void Transferir(Conta destino, decimal valor)
+ 
+        public void ExecutarTransferencia(ITransferenciaStrategy estrategia, Conta destino, decimal valor)
         {
-            if (destino == null)
-                throw new ArgumentNullException(nameof(destino));
+            if (destino == null) throw new ArgumentNullException(nameof(destino));
 
-            Sacar(valor);
-            destino.Depositar(valor);
+            estrategia.Transferir(this, destino, valor);
         }
     }
 }

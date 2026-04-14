@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ContaBancariaGood;
-using ContaBancariaGood.Domain.Entities;
+﻿using ContaBancariaGood.Domain.Entities;
 
 namespace ContaBancariaGood.Domain.Interfaces
 {

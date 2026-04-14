@@ -1,4 +1,6 @@
 ﻿using ContaBancariaGood.Application.Services;
+using ContaBancariaGood.Domain.Interfaces;
+using ContaBancariaGood.Domain.Strategies;
 
 namespace ContaBancariaGood.UI
 {
@@ -72,6 +74,7 @@ namespace ContaBancariaGood.UI
             Console.WriteLine("Saque realizado!");
             Console.ReadKey();
         }
+        
         private void Transferir()
         {
             Console.Clear();
@@ -81,9 +84,19 @@ namespace ContaBancariaGood.UI
             string destino = Console.ReadLine();
             decimal valor = LerDecimal("Valor: ");
 
-            _service.Transferir(origem, destino, valor);
+            Console.WriteLine("Tipo (1 - PIX, 2 - TED): ");
+            int tipo = int.Parse(Console.ReadLine());
 
-            Console.WriteLine("Transferência realizada!");
+            ITransferenciaStrategy estrategia = tipo switch
+            {
+                1 => new TransferenciaPixStrategy(),
+                2 => new TransferenciaTedStrategy(),
+                _ => throw new Exception("Tipo de transferência inválido.")
+            };
+
+            _service.Transferir(origem, destino, valor, estrategia);
+
+            Console.WriteLine("Transferência realizada com sucesso!");
             Console.ReadKey();
         }
         private void CriarConta()
