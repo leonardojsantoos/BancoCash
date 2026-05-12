@@ -91,6 +91,8 @@ namespace ContaBancariaGood.UI
             {
                 1 => new TransferenciaPixStrategy(),
                 2 => new TransferenciaTedStrategy(),
+                3 => new TransferenciaDOCStrategy(),
+                4 => new TransferenciaInternacionalStrategy(),
                 _ => throw new Exception("Tipo de transferência inválido.")
             };
 
@@ -139,6 +141,40 @@ namespace ContaBancariaGood.UI
         {
             Console.Write(mensagem);
             return decimal.Parse(Console.ReadLine());
+        }
+
+        private void Registro()
+        {
+            Console.Clear();
+
+            Console.Write("Número da conta: ");
+            string numero = Console.ReadLine();
+
+            var conta = _service.BuscarConta(numero);
+
+            if (conta == null)
+            {
+                Console.WriteLine("Conta não encontrada.");
+            }
+            else if (!conta.Historico.Any())
+            {
+                Console.WriteLine("Nenhuma transação encontrada.");
+            }
+            else
+            {
+                Console.WriteLine($"\nExtrato da conta {conta.Numero}\n");
+
+                foreach (var transacao in conta.Historico)
+                {
+                    Console.WriteLine(
+                        $"{transacao.Data:dd/MM/yyyy HH:mm} - " +
+                        $"{transacao.Tipo} - " +
+                        $"R$ {transacao.Valor:N2}"
+                    );
+                }
+            }
+
+            Console.ReadKey();
         }
     }
 }

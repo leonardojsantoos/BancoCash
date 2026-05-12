@@ -1,4 +1,5 @@
-﻿using ContaBancariaGood.Domain.Interfaces;
+﻿using ContaBancariaGood.Domain.Entities.ContaBancariaGood.Domain.Entities;
+using ContaBancariaGood.Domain.Interfaces;
 
 namespace ContaBancariaGood.Domain.Entities
 {
@@ -7,7 +8,7 @@ namespace ContaBancariaGood.Domain.Entities
         public string Titular { get; }
         public string Numero { get; }
         public decimal Saldo { get; private set; }
-
+        public List<Transacao> Historico { get; } = new();
         public Conta(string titular, string numero)
         {
             if (string.IsNullOrWhiteSpace(titular))
@@ -26,6 +27,8 @@ namespace ContaBancariaGood.Domain.Entities
                 throw new ArgumentException("Valor deve ser maior que zero.");
 
             Saldo += valor;
+
+            Historico.Add(new Transacao("Depósito", valor));
         }
 
         public void Sacar(decimal valor)
@@ -37,13 +40,16 @@ namespace ContaBancariaGood.Domain.Entities
                 throw new InvalidOperationException("Saldo insuficiente.");
 
             Saldo -= valor;
+
+            Historico.Add(new Transacao("Saque", valor));
         }
- 
+
         public void ExecutarTransferencia(ITransferenciaStrategy estrategia, Conta destino, decimal valor)
         {
             if (destino == null) throw new ArgumentNullException(nameof(destino));
 
             estrategia.Transferir(this, destino, valor);
+            Historico.Add(new Transacao("Transacao", valor));
         }
     }
 }

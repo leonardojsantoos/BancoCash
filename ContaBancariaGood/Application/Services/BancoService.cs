@@ -49,5 +49,10 @@ namespace ContaBancariaGood.Application.Services
             return _repository.ObterPorNumero(numero)
                 ?? throw new Exception("Conta não encontrada.");
         }
+
+        public Conta BuscarConta(string numero)
+        {
+            return _repository.ObterPorNumero(numero);
+        }
     }
 }
