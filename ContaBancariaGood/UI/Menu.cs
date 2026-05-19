@@ -26,7 +26,8 @@ namespace ContaBancariaGood.UI
                 3 - Transferir
                 4 - Criar Conta
                 5 - Listar Contas
-                6 - Sair
+                6 - Registro transações
+                7 - Sair
                 """);
 
                 int.TryParse(Console.ReadLine(), out opcao);
@@ -40,6 +41,7 @@ namespace ContaBancariaGood.UI
                         case 3: Transferir(); break;
                         case 4: CriarConta(); break;
                         case 5: Listar(); break;
+                        case 6: Registro(); break;
                     }
                 }
                 catch (Exception ex)
@@ -48,7 +50,7 @@ namespace ContaBancariaGood.UI
                     Console.ReadKey();
                 }
 
-            } while (opcao != 6);
+            } while (opcao != 7);
         }
         private void Depositar()
         {
